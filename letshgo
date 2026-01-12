@@ -2,10 +2,10 @@
 REALNAME=$(pass git/realname)
 EMAIL=$(pass git/email)
 REPLACE() {
-  if [ ! $REALNAME ]; then
+  if [[ ! $REALNAME ]]; then
     pass insert git/realname
   fi
-  if [ ! $EMAIL ]; then
+  if [[ ! $EMAIL ]]; then
     pass insert git/email
   fi
   sed -e "s/$1/$2/g" -e "s/$3/$4/g" $5 >$6
