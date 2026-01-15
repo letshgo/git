@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-REALNAME=$(pass git/realname)
-EMAIL=$(pass git/email)
+declare -A GITCRED=(
+  [REALNAME]=git/realname
+  [EMAIL]=git/email
+)
 REPLACE() {
-  if [[ ! $REALNAME ]]; then
-    pass insert git/realname
-  fi
-  if [[ ! $EMAIL ]]; then
-    pass insert git/email
-  fi
+  for CRED in ${GITCRED[@]}; do
+    if ! pass $CRED &>/dev/null; then
+      pass insert $CRED
+    fi
+  done
   sed -e "s/$1/$2/g" -e "s/$3/$4/g" $5 >$6
 }
-REPLACE REALNAME "$REALNAME" EMAIL "$EMAIL" config.tmpl config
+REPLACE REALNAME "$(pass ${GITCRED[REALNAME]})" EMAIL "$(pass ${GITCRED[EMAIL]})" config.tmpl config
